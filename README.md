@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # MovieVerse
 
 MovieVerse is a Flask application for discovering movies, TV shows, and anime
@@ -47,6 +46,3 @@ TMDB adult search is enabled only after a user submits a non-empty search, so a
 restricted title can appear as a direct search result. Restricted recommendations
 are allowed only when that explicit search's first matching title is itself
 restricted. The interface does not display Adult or `18+` badges.
-=======
-# movieverse
->>>>>>> ef5bd9c2917a854bcb1a5b5fd819efa59a39e0aa
