@@ -1,0 +1,23 @@
+{% macro media_card(media) %}
+<a class="card" href="{{ url_for('details', media_type=media.media_type, media_id=media.id) }}">
+    <div class="poster">
+        {% if media.poster_path %}
+            <img
+                src="https://image.tmdb.org/t/p/w500{{ media.poster_path }}"
+                alt="{{ media.display_title }} poster"
+                loading="lazy"
+            >
+        {% else %}
+            <div class="poster-placeholder">No poster available</div>
+        {% endif %}
+        <span class="media-badge">{{ media.media_label }}</span>
+    </div>
+    <div class="info">
+        <h3>{{ media.display_title }}</h3>
+        <div class="card-meta">
+            <span class="rating">★ {{ "%.1f"|format(media.vote_average|default(0, true)) }}</span>
+            {% if media.year %}<span>{{ media.year }}</span>{% endif %}
+        </div>
+    </div>
+</a>
+{% endmacro %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% from "_macros.html" import media_card %}
+
+{% block title %}MovieVerse · Movies, TV Shows & Anime{% endblock %}
+
+{% block content %}
+<header class="hero">
+    <div class="hero-overlay">
+        <p class="eyebrow">Your next story starts here</p>
+        <h1>Unlimited movies, anime & TV shows</h1>
+        <p>Explore trending favorites, discover anime, and search the whole MovieVerse.</p>
+        <a class="button" href="{{ url_for('explore') }}">Explore now</a>
+    </div>
+</header>
+
+{% if error %}
+    <div class="message error">{{ error }}</div>
+{% endif %}
+
+<section class="section">
+    <div class="section-heading">
+        <h2>🔥 Trending movies</h2>
+        <a href="{{ url_for('explore') }}">See all</a>
+    </div>
+    <div class="movies">
+        {% for movie in movies %}
+            {{ media_card(movie) }}
+        {% else %}
+            <p class="empty-state">No trending movies are available right now.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-heading">
+        <h2>⚔ Anime collection</h2>
+    </div>
+    <div class="movies">
+        {% for show in anime %}
+            {{ media_card(show) }}
+        {% else %}
+            <p class="empty-state">No anime titles are available right now.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% from "_macros.html" import media_card %}
+
+{% block title %}{{ media.display_title if media else "Details" }} · MovieVerse{% endblock %}
+
+{% block content %}
+{% if error %}
+    <div class="details-error">
+        <div class="message error">{{ error }}</div>
+        <a class="button" href="{{ url_for('home') }}">Back home</a>
+    </div>
+{% elif media %}
+<header
+    class="details-hero"
+    {% if media.backdrop_path %}
+    style="background-image: linear-gradient(90deg, rgba(8,8,10,.98) 15%, rgba(8,8,10,.72) 60%, rgba(8,8,10,.92)), url('https://image.tmdb.org/t/p/original{{ media.backdrop_path }}')"
+    {% endif %}
+>
+    <div class="details-poster">
+        {% if media.poster_path %}
+            <img src="https://image.tmdb.org/t/p/w500{{ media.poster_path }}" alt="{{ media.display_title }} poster">
+        {% else %}
+            <div class="poster-placeholder">No poster available</div>
+        {% endif %}
+    </div>
+    <div class="details-copy">
+        <div class="details-labels">
+            <span class="media-badge static">{{ media.media_label }}</span>
+        </div>
+        <h1>{{ media.display_title }}</h1>
+        {% if media.tagline %}<p class="tagline">{{ media.tagline }}</p>{% endif %}
+        <div class="facts">
+            {% if media.year %}<span>{{ media.year }}</span>{% endif %}
+            <span>★ {{ "%.1f"|format(media.vote_average|default(0, true)) }}</span>
+            {% if media.runtime %}<span>{{ media.runtime }} min</span>{% endif %}
+            {% if media.number_of_seasons %}<span>{{ media.number_of_seasons }} season{{ "s" if media.number_of_seasons != 1 }}</span>{% endif %}
+        </div>
+        {% if media.genres %}
+        <div class="genres">
+            {% for genre in media.genres %}<span>{{ genre.name }}</span>{% endfor %}
+        </div>
+        {% endif %}
+        <p class="overview">{{ media.overview or "No overview is available for this title." }}</p>
+        {% if trailer %}
+            <a class="button" href="https://www.youtube.com/watch?v={{ trailer.key }}" target="_blank" rel="noopener">Watch trailer</a>
+        {% endif %}
+    </div>
+</header>
+
+{% if cast %}
+<section class="section">
+    <div class="section-heading"><h2>Top cast</h2></div>
+    <div class="cast-list">
+        {% for person in cast %}
+        <article class="cast-member">
+            {% if person.profile_path %}
+                <img src="https://image.tmdb.org/t/p/w185{{ person.profile_path }}" alt="{{ person.name }}" loading="lazy">
+            {% else %}
+                <div class="cast-placeholder">👤</div>
+            {% endif %}
+            <h3>{{ person.name }}</h3>
+            <p>{{ person.character }}</p>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% if recommendations %}
+<section class="section">
+    <div class="section-heading"><h2>You may also like</h2></div>
+    <div class="movies">
+        {% for item in recommendations %}
+            {{ media_card(item) }}
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% from "_macros.html" import media_card %}
+
+{% block title %}Search: {{ query }} · MovieVerse{% endblock %}
+
+{% block content %}
+<header class="page-header compact">
+    <p class="eyebrow">Search results</p>
+    <h1>“{{ query }}”</h1>
+    <p>Movies, TV shows, and anime matching your search.</p>
+</header>
+
+{% if error %}
+    <div class="message error">{{ error }}</div>
+{% endif %}
+
+<section class="section first-section">
+    <div class="section-heading">
+        <h2>Results</h2>
+        {% if results %}<span>{{ results|length }} found</span>{% endif %}
+    </div>
+    <div class="movies">
+        {% for media in results %}
+            {{ media_card(media) }}
+        {% else %}
+            <p class="empty-state">No movies, TV shows, or anime matched “{{ query }}”.</p>
+        {% endfor %}
+    </div>
+</section>
+
+{% if total_pages > 1 %}
+<nav class="pagination" aria-label="Search result pages">
+    {% if page > 1 %}
+        <a href="{{ url_for('search', q=query, page=page - 1) }}">← Previous</a>
+    {% else %}
+        <span class="disabled">← Previous</span>
+    {% endif %}
+    <span>Page {{ page }} of {{ total_pages }}</span>
+    {% if page < total_pages %}
+        <a href="{{ url_for('search', q=query, page=page + 1) }}">Next →</a>
+    {% else %}
+        <span class="disabled">Next →</span>
+    {% endif %}
+</nav>
+{% endif %}
+
+{% if recommendations %}
+<section class="section">
+    <div class="section-heading">
+        <h2>Because you searched “{{ query }}”</h2>
+    </div>
+    <div class="movies">
+        {% for media in recommendations %}
+            {{ media_card(media) }}
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}

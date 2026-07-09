@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% from "_macros.html" import media_card %}
+
+{% block title %}Explore · MovieVerse{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <p class="eyebrow">Discover something great</p>
+    <h1>Explore MovieVerse</h1>
+    <p>Popular picks across movies and television, with adult titles kept out of discovery.</p>
+</header>
+
+{% if error %}
+    <div class="message error">{{ error }}</div>
+{% endif %}
+
+<section class="section">
+    <div class="section-heading"><h2>🔥 Popular movies</h2></div>
+    <div class="movies">
+        {% for movie in movies %}
+            {{ media_card(movie) }}
+        {% else %}
+            <p class="empty-state">No popular movies are available right now.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-heading"><h2>📺 Popular TV shows</h2></div>
+    <div class="movies">
+        {% for show in shows %}
+            {{ media_card(show) }}
+        {% else %}
+            <p class="empty-state">No popular TV shows are available right now.</p>
+        {% endfor %}
+    </div>
+</section>
+
+{% if total_pages > 1 %}
+<nav class="pagination" aria-label="Explore pages">
+    {% if page > 1 %}
+        <a href="{{ url_for('explore', page=page - 1) }}">← Previous</a>
+    {% else %}
+        <span class="disabled">← Previous</span>
+    {% endif %}
+    <span>Page {{ page }} of {{ total_pages }}</span>
+    {% if page < total_pages %}
+        <a href="{{ url_for('explore', page=page + 1) }}">Next →</a>
+    {% else %}
+        <span class="disabled">Next →</span>
+    {% endif %}
+</nav>
+{% endif %}
+{% endblock %}
